@@ -28,7 +28,12 @@
                 <div class="aside"><img src="{{ item.product.images.url }}" class="img-sm"></div>
                 <figcaption class="info">
                     <a href="{% url 'product_detail' item.product.category.slug item.product.slug %}" class="title text-dark">{{ item.product.product_name }}</a>
-                    <p class="text-muted small">Color: 25 Mpx <br> Size: Canon</p>
+                    <p class="text-muted small">
+                        {% for variation in item.variations.all %}
+                            {{ variation.variation_category | capfirst }}: {{ variation.variation_value | capfirst }}
+                            <br>
+                        {% endfor %}
+                        <!-- {{ item.variations}}: 25 Mpx <br> Size: Canon</p> -->
                 </figcaption>
             </figure>
         </td>
@@ -37,11 +42,11 @@
                         <div class="col"> 
                             <div class="input-group input-spinner">
                                 <div class="input-group-prepend">
-                                <a href="{% url 'decrement_quantity' item.product.id %}" class="btn btn-light" type="button" id="button-plus"> <i class="fa fa-minus"></i> </a>
+                                <a href="{% url 'decrement_quantity' item.id %}" class="btn btn-light" type="button" id="button-plus"> <i class="fa fa-minus"></i> </a>
                                 </div>
                                 <input type="text" class="form-control"  value="{{ item.quantity }}">
                                 <div class="input-group-append">
-                                <a href="{% url 'add_cart' item.product.id %}" class="btn btn-light" type="button" id="button-minus"> <i class="fa fa-plus"></i> </a>
+                                <a href="{% url 'increment_quantity' item.id %}" class="btn btn-light" type="button" id="button-minus"> <i class="fa fa-plus"></i> </a>
                                 </div>
                             </div> <!-- input-group.// -->
                         </div> <!-- col.// -->
@@ -53,7 +58,7 @@
             </div> <!-- price-wrap .// -->
         </td>
         <td class="text-right"> 
-        <a href="{% url 'remove_item' item.product.id %}" class="btn btn-danger"> Remove</a>
+        <a href="{% url 'remove_item' item.id %}" class="btn btn-danger"> Remove</a>
         </td>
     </tr>
     {% endfor %}
